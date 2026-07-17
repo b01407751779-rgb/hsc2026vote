@@ -1,26 +1,29 @@
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #f2f2f2;
-  padding: 30px;
-}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Vote Now</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-h1 {
-  color: green;
-}
+<body>
 
-button {
-  background: blue;
-  color: white;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 18px;
-}
+<h1>HSC 2026 Vote</h1>
 
-input, select {
-  padding: 10px;
-  width: 250px;
-  border-radius: 5px;
-}
+<h2>Select Your Candidate</h2>
+
+<div>
+  <img src="https://via.placeholder.com/150" width="150">
+  <h3>Candidate 1</h3>
+  <button>Vote</button>
+</div>
+
+<br>
+
+<div>
+  <img src="https://via.placeholder.com/150" width="150">
+  <h3>Candidate 2</h3>
+  <button>Vote</button>
+</div>
+
+</body>
+</html>
