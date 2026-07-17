@@ -14,19 +14,20 @@
 <h2>আপনি কি MCQ + CQ মিলিয়ে পাস চান?</h2>
 
 <label>
-<input type="radio" name="vote"> হ্যাঁ
+<input type="radio" name="vote" id="yes">
+<label for="yes">হ্যাঁ</label>
 </label>
 
 <br><br>
 
 <label>
-<input type="radio" name="vote"> না
+<input type="radio" name="vote" id="no">
+<label for="no">না</label>
 </label>
 
 <br><br>
 
-<button onclick="alert('আপনার ভোট গ্রহণ করা হয়েছে')">
-ভোট দিন
+<button onclick="submitVote()">ভোট দিন</button>
 </button>
 
 <br><br>
@@ -61,6 +62,11 @@
     });
     alert("ভোট দেওয়া হয়েছে");
   };
+</script>
+  <script>
+function submitVote() {
+  alert("আপনার ভোট গ্রহণ করা হয়েছে");
+}
 </script>
 </body>
 </html>
