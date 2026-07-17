@@ -2,7 +2,39 @@
 <html>
 <head>
 <title>HSC 2026 Vote</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+  font-family: Arial;
+  text-align:center;
+  background:#f2f2f2;
+  padding:30px;
+}
+
+.box{
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  max-width:400px;
+  margin:auto;
+}
+
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:8px;
+  background:#008000;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  margin:10px;
+}
+
+h1{
+ color:green;
+}
+</style>
+
 </head>
 
 <body>
@@ -11,112 +43,120 @@
 
 <h1>HSC 2026 Vote</h1>
 
-<h2>আপনি কি MCQ + CQ মিলিয়ে পাস চান?</h2>
+<h3>আপনি কি MCQ + CQ মিলিয়ে পাস চান?</h3>
 
 <label>
 <input type="radio" name="vote" value="yes">
-<label for="yes">হ্যাঁ</label>
+হ্যাঁ
 </label>
 
 <br><br>
 
 <label>
 <input type="radio" name="vote" value="no">
-<label for="no">না</label>
+না
 </label>
 
 <br><br>
-<p>হ্যাঁ ভোট: <span id="yesCount">0</span></p>
 
-<p>না ভোট: <span id="noCount">0</span></p>
-<button onclick="alert('কাজ করছে')">ভোট দিন</button>
+<button onclick="submitVote()">ভোট দিন</button>
 
-<br><br>
+<h3>বর্তমান ভোট:</h3>
 
-<a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3?s=cl&p=a&ilr=0&amv=0" target="_blank">
+<p>হ্যাঁ: <span id="yesCount">0</span></p>
+
+<p>না: <span id="noCount">0</span></p>
+
+
+<a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3?s=cl&p=a&ilr=0&amv=0">
 <button>WhatsApp Group Join</button>
 </a>
 
+
 </div>
+
+
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
-    authDomain: "hsc2026vote.firebaseapp.com",
-    databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
-    projectId: "hsc2026vote",
-    storageBucket: "hsc2026vote.firebasestorage.app",
-    messagingSenderId: "126199992601",
-    appId: "1:126199992601:web:098173f31a95b0d8a17588"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-
-  const voteRef = ref(db, "votes");
-
-  window.vote = function(choice) {
-    update(voteRef, {
-      [choice]: (Math.floor(Math.random()*1)+1)
-    });
-    alert("ভোট দেওয়া হয়েছে");
-  };
-</script>
-  <script>
-function submitVote() {
-  alert("আপনার ভোট গ্রহণ করা হয়েছে");
-}
-</script>
-  <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
-  authDomain: "hsc2026vote.firebaseapp.com",
-  databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
-  projectId: "hsc2026vote",
-  storageBucket: "hsc2026vote.firebasestorage.app",
-  messagingSenderId: "126199992601",
-  appId: "1:126199992601:web:098173f31a95b0d8a17588"
+
+apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
+
+authDomain: "hsc2026vote.firebaseapp.com",
+
+databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
+
+projectId: "hsc2026vote",
+
+storageBucket: "hsc2026vote.firebasestorage.app",
+
+messagingSenderId: "126199992601",
+
+appId: "1:126199992601:web:098173f31a95b0d8a17588"
+
 };
 
+
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
+
+
 window.submitVote = async function(){
-  const yesRef = ref(db, "votes/yes");
-const noRef = ref(db, "votes/no");
 
-onValue(yesRef, (snapshot) => {
-  document.getElementById("yesCount").innerHTML = snapshot.val() || 0;
-});
+let choice = document.querySelector('input[name="vote"]:checked');
 
-onValue(noRef, (snapshot) => {
-  document.getElementById("noCount").innerHTML = snapshot.val() || 0;
-});
 
- let choice = document.querySelector('input[name="vote"]:checked');
+if(!choice){
 
- if(!choice){
-   alert("একটি অপশন নির্বাচন করুন");
-   return;
- }
+alert("একটি অপশন নির্বাচন করুন");
 
- let vote = choice.value;
+return;
 
- const voteRef = ref(db, "votes/" + vote);
-
- const snapshot = await get(voteRef);
-
- let count = snapshot.exists() ? snapshot.val() : 0;
-
- set(voteRef, count + 1);
-
- alert("আপনার ভোট গ্রহণ করা হয়েছে");
 }
-  </script>
+
+
+let voteRef = ref(db,"votes/"+choice.value);
+
+
+let snap = await get(voteRef);
+
+
+let count = snap.exists() ? snap.val() : 0;
+
+
+await set(voteRef,count+1);
+
+
+alert("আপনার ভোট গ্রহণ করা হয়েছে");
+
+
+}
+
+
+
+onValue(ref(db,"votes/yes"),(snap)=>{
+
+document.getElementById("yesCount").innerHTML = snap.val() || 0;
+
+});
+
+
+onValue(ref(db,"votes/no"),(snap)=>{
+
+document.getElementById("noCount").innerHTML = snap.val() || 0;
+
+});
+
+
+</script>
+
+
 </body>
 </html>
