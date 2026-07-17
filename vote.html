@@ -26,7 +26,9 @@
 </label>
 
 <br><br>
+<p>হ্যাঁ ভোট: <span id="yesCount">0</span></p>
 
+<p>না ভোট: <span id="noCount">0</span></p>
 <button onclick="submitVote()">ভোট দিন</button>
 </button>
 
@@ -39,7 +41,7 @@
 </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
@@ -86,6 +88,16 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 window.submitVote = async function(){
+  const yesRef = ref(db, "votes/yes");
+const noRef = ref(db, "votes/no");
+
+onValue(yesRef, (snapshot) => {
+  document.getElementById("yesCount").innerHTML = snapshot.val() || 0;
+});
+
+onValue(noRef, (snapshot) => {
+  document.getElementById("noCount").innerHTML = snapshot.val() || 0;
+});
 
  let choice = document.querySelector('input[name="vote"]:checked');
 
