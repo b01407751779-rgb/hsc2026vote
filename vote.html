@@ -76,7 +76,10 @@ button:hover{
 <p>হ্যাঁ: <span id="yesCount" class="count">0</span></p>
 
 <p>না: <span id="noCount" class="count">0</span></p>
-
+  
+<p>হ্যাঁ শতাংশ: <span id="yesPercent">0%</span></p>
+  
+<p>না শতাংশ: <span id="noPercent">0%</span></p>
 
 <a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3">
 <button>WhatsApp Group Join</button>
@@ -134,7 +137,36 @@ onValue(noRef,(snapshot)=>{
  document.getElementById("noCount").innerHTML = snapshot.val() || 0;
 });
 
+function updatePercent(){
 
+ get(yesRef).then((yesSnap)=>{
+  get(noRef).then((noSnap)=>{
+
+   let yes = yesSnap.val() || 0;
+   let no = noSnap.val() || 0;
+
+   let total = yes + no;
+
+   if(total == 0){
+    document.getElementById("yesPercent").innerHTML="0%";
+    document.getElementById("noPercent").innerHTML="0%";
+   }
+   else{
+    document.getElementById("yesPercent").innerHTML =
+    ((yes/total)*100).toFixed(1)+"%";
+
+    document.getElementById("noPercent").innerHTML =
+    ((no/total)*100).toFixed(1)+"%";
+   }
+
+  });
+ });
+
+}
+
+
+onValue(yesRef,updatePercent);
+onValue(noRef,updatePercent);
 
 // ভোট দেওয়া
 
