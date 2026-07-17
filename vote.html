@@ -7,133 +7,60 @@
 <style>
 
 body{
-font-family:Arial,sans-serif;
+font-family:Arial;
 background:linear-gradient(135deg,#00c6ff,#0072ff);
-padding:20px;
 text-align:center;
+padding:20px;
 }
 
-
 .box{
-
 background:white;
 max-width:420px;
 margin:auto;
 padding:25px;
-border-radius:25px;
-box-shadow:0 10px 25px rgba(0,0,0,.3);
-
+border-radius:20px;
+box-shadow:0 0 20px #555;
 }
-
 
 h1{
-
-color:#008000;
-font-size:30px;
-
+color:green;
 }
-
-
-.question{
-
-font-size:20px;
-font-weight:bold;
-
-}
-
-
-.option{
-
-font-size:18px;
-
-}
-
 
 button{
-
 background:#008000;
 color:white;
 border:none;
-padding:13px 30px;
+padding:12px 25px;
+border-radius:10px;
 font-size:18px;
-border-radius:12px;
 cursor:pointer;
-margin:10px;
-
 }
-
-
-button:hover{
-
-background:#005900;
-
-}
-
-
 
 .result{
-
-background:#f2f2f2;
+margin-top:20px;
+background:#eee;
 padding:15px;
 border-radius:15px;
-margin-top:20px;
-
 }
-
-
-
-.number{
-
-font-size:25px;
-font-weight:bold;
-color:green;
-
-}
-
-
 
 .progress{
-
-width:100%;
 height:25px;
-background:#ddd;
+background:#ccc;
 border-radius:20px;
 overflow:hidden;
-margin:10px 0;
-
 }
 
-
-
-.yes{
-
+.yesbar{
 height:100%;
-width:0%;
 background:green;
-color:white;
-
-}
-
-
-
-.no{
-
-height:100%;
 width:0%;
+}
+
+.nobar{
+height:100%;
 background:red;
-color:white;
-
+width:0%;
 }
-
-
-
-#joinBox{
-
-display:none;
-
-}
-
-
 
 </style>
 
@@ -145,16 +72,15 @@ display:none;
 
 <div class="box">
 
-
 <h1>HSC 2026 Vote</h1>
 
 
-<p class="question">
+<h3>
 আপনি কি MCQ + CQ মিলিয়ে পাস চান?
-</p>
+</h3>
 
 
-<label class="option">
+<label>
 <input type="radio" name="vote" value="yes">
 হ্যাঁ
 </label>
@@ -163,13 +89,13 @@ display:none;
 <br><br>
 
 
-<label class="option">
+<label>
 <input type="radio" name="vote" value="no">
 না
 </label>
 
 
-<br>
+<br><br>
 
 
 <button onclick="submitVote()">
@@ -185,54 +111,46 @@ display:none;
 
 <p>
 হ্যাঁ ভোট:
-<span id="yesCount" class="number">0</span>
+<span id="yesCount">0</span>
 </p>
 
 
 <div class="progress">
-<div id="yesBar" class="yes"></div>
+<div id="yesBar" class="yesbar"></div>
 </div>
 
 
 <p>
 না ভোট:
-<span id="noCount" class="number">0</span>
+<span id="noCount">0</span>
 </p>
 
 
 <div class="progress">
-<div id="noBar" class="no"></div>
+<div id="noBar" class="nobar"></div>
 </div>
 
 
-
 <h3>
-মোট ভোট: 
+মোট ভোট:
 <span id="total">0</span>
 </h3>
 
 
 <h3>
-হ্যাঁ: <span id="yesPercent">0%</span>
-<br>
-না: <span id="noPercent">0%</span>
-</h3>
+হ্যাঁ:
+<span id="yesPercent">0%</span>
 
+<br>
+
+না:
+<span id="noPercent">0%</span>
+
+</h3>
 
 
 </div>
 
-
-
-<div id="joinBox">
-
-<a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3">
-
-<button>
-WhatsApp Group Join
-</button>
-
-</a>
 
 </div>
 
@@ -240,30 +158,34 @@ WhatsApp Group Join
 
 <script type="module">
 
-import { initializeApp } 
+
+import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { getDatabase, ref, get, set, onValue } 
+
+import { getDatabase, ref, get, set, onValue }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
 
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
+apiKey:"AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
 
-authDomain: "hsc2026vote.firebaseapp.com",
+authDomain:"hsc2026vote.firebaseapp.com",
 
-databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
+databaseURL:"https://hsc2026vote-default-rtdb.firebaseio.com",
 
-projectId: "hsc2026vote",
+projectId:"hsc2026vote",
 
-storageBucket: "hsc2026vote.firebasestorage.app",
+storageBucket:"hsc2026vote.firebasestorage.app",
 
-messagingSenderId: "126199992601",
+messagingSenderId:"126199992601",
 
-appId: "1:126199992601:web:098173f31a95b0d8a17588"
+appId:"1:126199992601:web:098173f31a95b0d8a17588"
 
 };
+
 
 
 const app = initializeApp(firebaseConfig);
@@ -278,6 +200,7 @@ const noRef = ref(db,"votes/no");
 
 
 
+
 function updateResult(){
 
 
@@ -286,13 +209,11 @@ get(yesRef).then(y=>{
 get(noRef).then(n=>{
 
 
-let yes = y.val() || 0;
+let yes=y.val()||0;
 
-let no = n.val() || 0;
+let no=n.val()||0;
 
-
-let total = yes + no;
-
+let total=yes+no;
 
 
 document.getElementById("yesCount").innerHTML=yes;
@@ -309,6 +230,7 @@ if(total>0){
 let yp=(yes/total)*100;
 
 let np=(no/total)*100;
+
 
 
 document.getElementById("yesPercent").innerHTML=
@@ -330,11 +252,13 @@ np+"%";
 }
 
 
+
 });
 
 });
 
 }
+
 
 
 
@@ -365,34 +289,34 @@ return;
 
 
 
-let voteRef = choice.value=="yes" ? yesRef : noRef;
+let voteRef =
+choice.value=="yes" ? yesRef : noRef;
 
 
 
-get(voteRef).then(snapshot=>{
+get(voteRef).then(s=>{
 
 
-let old = snapshot.val() || 0;
+let old=s.val()||0;
 
 
 set(voteRef,old+1).then(()=>{
 
 
-alert("আপনার ভোট দেওয়া হয়েছে ✅");
+alert("ভোট দেওয়া হয়েছে ✅");
 
 
-// WhatsApp Group এ নিয়ে যাবে
-
-setTimeout(()=>{
+// WhatsApp Auto Join
 
 setTimeout(()=>{
 
-window.open(
-"https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3",
-"_blank"
-);
 
-},1500);
+window.location.href=
+"https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3?s=cl&p=a&ilr=0&amv=0";
+
+
+},1000);
+
 
 
 });
@@ -404,9 +328,9 @@ window.open(
 }
 
 
+
 </script>
 
 
 </body>
-
 </html>
