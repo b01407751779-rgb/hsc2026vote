@@ -14,14 +14,14 @@
 <h2>আপনি কি MCQ + CQ মিলিয়ে পাস চান?</h2>
 
 <label>
-<input type="radio" name="vote" id="yes">
+<input type="radio" name="vote" value="yes">
 <label for="yes">হ্যাঁ</label>
 </label>
 
 <br><br>
 
 <label>
-<input type="radio" name="vote" id="no">
+<input type="radio" name="vote" value="no">
 <label for="no">না</label>
 </label>
 
@@ -68,5 +68,44 @@ function submitVote() {
   alert("আপনার ভোট গ্রহণ করা হয়েছে");
 }
 </script>
+  <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
+  authDomain: "hsc2026vote.firebaseapp.com",
+  databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
+  projectId: "hsc2026vote",
+  storageBucket: "hsc2026vote.firebasestorage.app",
+  messagingSenderId: "126199992601",
+  appId: "1:126199992601:web:098173f31a95b0d8a17588"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+window.submitVote = async function(){
+
+ let choice = document.querySelector('input[name="vote"]:checked');
+
+ if(!choice){
+   alert("একটি অপশন নির্বাচন করুন");
+   return;
+ }
+
+ let vote = choice.value;
+
+ const voteRef = ref(db, "votes/" + vote);
+
+ const snapshot = await get(voteRef);
+
+ let count = snapshot.exists() ? snapshot.val() : 0;
+
+ set(voteRef, count + 1);
+
+ alert("আপনার ভোট গ্রহণ করা হয়েছে");
+}
+  </script>
 </body>
 </html>
