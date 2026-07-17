@@ -8,18 +8,18 @@
 
 body{
 font-family:Arial;
-background:linear-gradient(135deg,#00c6ff,#0072ff);
+background:#e8f5e9;
 text-align:center;
 padding:20px;
 }
 
 .box{
 background:white;
-max-width:420px;
+max-width:400px;
 margin:auto;
 padding:25px;
 border-radius:20px;
-box-shadow:0 0 20px #555;
+box-shadow:0 0 15px #999;
 }
 
 h1{
@@ -27,36 +27,28 @@ color:green;
 }
 
 button{
-background:#008000;
+background:green;
 color:white;
-border:none;
+border:0;
 padding:12px 25px;
 border-radius:10px;
 font-size:18px;
-cursor:pointer;
-}
-
-.result{
-margin-top:20px;
-background:#eee;
-padding:15px;
-border-radius:15px;
 }
 
 .progress{
 height:25px;
-background:#ccc;
+background:#ddd;
 border-radius:20px;
 overflow:hidden;
 }
 
-.yesbar{
+#yesBar{
 height:100%;
 background:green;
 width:0%;
 }
 
-.nobar{
+#noBar{
 height:100%;
 background:red;
 width:0%;
@@ -66,126 +58,77 @@ width:0%;
 
 </head>
 
-
 <body>
-
 
 <div class="box">
 
 <h1>HSC 2026 Vote</h1>
 
+<h3>আপনি কি MCQ + CQ মিলিয়ে পাস চান?</h3>
 
-<h3>
-আপনি কি MCQ + CQ মিলিয়ে পাস চান?
-</h3>
-
-
-<label>
-<input type="radio" name="vote" value="yes">
-হ্যাঁ
-</label>
-
+<input type="radio" name="vote" value="yes"> হ্যাঁ
 
 <br><br>
 
-
-<label>
-<input type="radio" name="vote" value="no">
-না
-</label>
-
+<input type="radio" name="vote" value="no"> না
 
 <br><br>
 
-
-<button onclick="submitVote()">
-ভোট দিন
-</button>
+<button onclick="submitVote()">ভোট দিন</button>
 
 
+<h2>ফলাফল</h2>
 
-<div class="result">
-
-<h2>বর্তমান ফলাফল</h2>
-
-
-<p>
-হ্যাঁ ভোট:
-<span id="yesCount">0</span>
-</p>
-
+<p>হ্যাঁ: <span id="yesCount">0</span></p>
 
 <div class="progress">
-<div id="yesBar" class="yesbar"></div>
+<div id="yesBar"></div>
 </div>
 
 
-<p>
-না ভোট:
-<span id="noCount">0</span>
-</p>
-
+<p>না: <span id="noCount">0</span></p>
 
 <div class="progress">
-<div id="noBar" class="nobar"></div>
+<div id="noBar"></div>
 </div>
 
 
-<h3>
-মোট ভোট:
-<span id="total">0</span>
-</h3>
+<p>মোট ভোট: <span id="total">0</span></p>
 
-
-<h3>
-হ্যাঁ:
-<span id="yesPercent">0%</span>
-
+<p>
+হ্যাঁ: <span id="yesPercent">0%</span>
 <br>
-
-না:
-<span id="noPercent">0%</span>
-
-</h3>
+না: <span id="noPercent">0%</span>
+</p>
 
 
 </div>
-
-
-</div>
-
-
-
 <script type="module">
 
-
-import { initializeApp }
+import { initializeApp } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 
 import { getDatabase, ref, get, set, onValue }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
-
 const firebaseConfig = {
 
-apiKey:"AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
+apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
 
-authDomain:"hsc2026vote.firebaseapp.com",
+authDomain: "hsc2026vote.firebaseapp.com",
 
-databaseURL:"https://hsc2026vote-default-rtdb.firebaseio.com",
+databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
 
-projectId:"hsc2026vote",
+projectId: "hsc2026vote",
 
-storageBucket:"hsc2026vote.firebasestorage.app",
+storageBucket: "hsc2026vote.firebasestorage.app",
 
-messagingSenderId:"126199992601",
+messagingSenderId: "126199992601",
 
-appId:"1:126199992601:web:098173f31a95b0d8a17588"
+appId: "1:126199992601:web:098173f31a95b0d8a17588"
 
 };
-
 
 
 const app = initializeApp(firebaseConfig);
@@ -200,8 +143,7 @@ const noRef = ref(db,"votes/no");
 
 
 
-
-function updateResult(){
+function showVote(){
 
 
 get(yesRef).then(y=>{
@@ -209,11 +151,12 @@ get(yesRef).then(y=>{
 get(noRef).then(n=>{
 
 
-let yes=y.val()||0;
+let yes = y.val() || 0;
 
-let no=n.val()||0;
+let no = n.val() || 0;
 
-let total=yes+no;
+let total = yes + no;
+
 
 
 document.getElementById("yesCount").innerHTML=yes;
@@ -225,7 +168,6 @@ document.getElementById("total").innerHTML=total;
 
 
 if(total>0){
-
 
 let yp=(yes/total)*100;
 
@@ -248,9 +190,7 @@ yp+"%";
 document.getElementById("noBar").style.width=
 np+"%";
 
-
 }
-
 
 
 });
@@ -261,11 +201,9 @@ np+"%";
 
 
 
+onValue(yesRef,showVote);
 
-onValue(yesRef,updateResult);
-
-onValue(noRef,updateResult);
-
+onValue(noRef,showVote);
 
 
 
@@ -289,15 +227,15 @@ return;
 
 
 
-let voteRef =
-choice.value=="yes" ? yesRef : noRef;
+let voteRef = choice.value=="yes" ? yesRef : noRef;
 
 
 
-get(voteRef).then(s=>{
+get(voteRef).then(data=>{
 
 
-let old=s.val()||0;
+let old = data.val() || 0;
+
 
 
 set(voteRef,old+1).then(()=>{
@@ -306,14 +244,12 @@ set(voteRef,old+1).then(()=>{
 alert("ভোট দেওয়া হয়েছে ✅");
 
 
-// WhatsApp Auto Join
+// WhatsApp খুলবে
 
 setTimeout(()=>{
 
-
 window.location.href=
 "https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3?s=cl&p=a&ilr=0&amv=0";
-
 
 },1000);
 
