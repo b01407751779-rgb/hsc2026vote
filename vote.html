@@ -7,22 +7,27 @@
 body{
   font-family: Arial;
   text-align:center;
-  background:#f2f2f2;
+  background:linear-gradient(135deg,#d4fc79,#96e6a1);
   padding:30px;
 }
 
 .box{
   background:white;
   padding:25px;
-  border-radius:15px;
+  border-radius:20px;
   max-width:400px;
   margin:auto;
+  box-shadow:0 0 15px #999;
+}
+
+h1{
+ color:green;
 }
 
 button{
   padding:12px 25px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   background:#008000;
   color:white;
   font-size:18px;
@@ -30,8 +35,13 @@ button{
   margin:10px;
 }
 
-h1{
- color:green;
+button:hover{
+ background:#005f00;
+}
+
+.count{
+ font-size:20px;
+ font-weight:bold;
 }
 </style>
 
@@ -63,12 +73,12 @@ h1{
 
 <h3>বর্তমান ভোট:</h3>
 
-<p>হ্যাঁ: <span id="yesCount">0</span></p>
+<p>হ্যাঁ: <span id="yesCount" class="count">0</span></p>
 
-<p>না: <span id="noCount">0</span></p>
+<p>না: <span id="noCount" class="count">0</span></p>
 
 
-<a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3?s=cl&p=a&ilr=0&amv=0">
+<a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3">
 <button>WhatsApp Group Join</button>
 </a>
 
@@ -78,9 +88,11 @@ h1{
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, get, set, onValue } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -107,52 +119,59 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 
+const yesRef = ref(db,"votes/yes");
+const noRef = ref(db,"votes/no");
 
-window.submitVote = async function(){
+
+// ভোট সংখ্যা দেখানো
+
+onValue(yesRef,(snapshot)=>{
+ document.getElementById("yesCount").innerHTML = snapshot.val() || 0;
+});
+
+
+onValue(noRef,(snapshot)=>{
+ document.getElementById("noCount").innerHTML = snapshot.val() || 0;
+});
+
+
+
+// ভোট দেওয়া
+
+window.submitVote = function(){
 
 let choice = document.querySelector('input[name="vote"]:checked');
 
 
 if(!choice){
+ alert("একটি অপশন নির্বাচন করুন");
+ return;
+}
 
-alert("একটি অপশন নির্বাচন করুন");
 
-return;
+if(choice.value=="yes"){
+
+ get(yesRef).then((snap)=>{
+  let total = snap.val() || 0;
+  set(yesRef,total+1);
+ });
 
 }
 
 
-let voteRef = ref(db,"votes/"+choice.value);
+if(choice.value=="no"){
 
-
-let snap = await get(voteRef);
-
-
-let count = snap.exists() ? snap.val() : 0;
-
-
-await set(voteRef,count+1);
-
-
-alert("আপনার ভোট গ্রহণ করা হয়েছে");
-
+ get(noRef).then((snap)=>{
+  let total = snap.val() || 0;
+  set(noRef,total+1);
+ });
 
 }
 
 
+alert("ভোট দেওয়া হয়েছে ✅");
 
-onValue(ref(db,"votes/yes"),(snap)=>{
-
-document.getElementById("yesCount").innerHTML = snap.val() || 0;
-
-});
-
-
-onValue(ref(db,"votes/no"),(snap)=>{
-
-document.getElementById("noCount").innerHTML = snap.val() || 0;
-
-});
+}
 
 
 </script>
