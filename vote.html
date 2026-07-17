@@ -36,6 +36,31 @@
 </a>
 
 </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCG3h0M2H_YMs0wQb_UiWP8DaenWDrEDVw",
+    authDomain: "hsc2026vote.firebaseapp.com",
+    databaseURL: "https://hsc2026vote-default-rtdb.firebaseio.com",
+    projectId: "hsc2026vote",
+    storageBucket: "hsc2026vote.firebasestorage.app",
+    messagingSenderId: "126199992601",
+    appId: "1:126199992601:web:098173f31a95b0d8a17588"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  const voteRef = ref(db, "votes");
+
+  window.vote = function(choice) {
+    update(voteRef, {
+      [choice]: (Math.floor(Math.random()*1)+1)
+    });
+    alert("ভোট দেওয়া হয়েছে");
+  };
+</script>
 </body>
 </html>
