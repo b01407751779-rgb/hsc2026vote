@@ -7,108 +7,243 @@
 <style>
 
 body{
-font-family:Arial;
-background:#e8f5e9;
-text-align:center;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#00c6ff,#0072ff);
 padding:20px;
+text-align:center;
 }
+
 
 .box{
+
 background:white;
-max-width:400px;
+max-width:420px;
 margin:auto;
 padding:25px;
-border-radius:20px;
-box-shadow:0 0 15px #999;
+border-radius:25px;
+box-shadow:0 10px 25px rgba(0,0,0,.3);
+
 }
+
 
 h1{
-color:green;
+
+color:#008000;
+font-size:30px;
+
 }
+
+
+.question{
+
+font-size:20px;
+font-weight:bold;
+
+}
+
+
+.option{
+
+font-size:18px;
+
+}
+
 
 button{
-background:green;
+
+background:#008000;
 color:white;
-border:0;
-padding:12px 25px;
-border-radius:10px;
+border:none;
+padding:13px 30px;
 font-size:18px;
+border-radius:12px;
+cursor:pointer;
+margin:10px;
+
 }
 
+
+button:hover{
+
+background:#005900;
+
+}
+
+
+
+.result{
+
+background:#f2f2f2;
+padding:15px;
+border-radius:15px;
+margin-top:20px;
+
+}
+
+
+
+.number{
+
+font-size:25px;
+font-weight:bold;
+color:green;
+
+}
+
+
+
 .progress{
+
+width:100%;
 height:25px;
 background:#ddd;
 border-radius:20px;
 overflow:hidden;
+margin:10px 0;
+
 }
 
-#yesBar{
+
+
+.yes{
+
 height:100%;
+width:0%;
 background:green;
-width:0%;
+color:white;
+
 }
 
-#noBar{
+
+
+.no{
+
 height:100%;
-background:red;
 width:0%;
+background:red;
+color:white;
+
 }
+
+
+
+#joinBox{
+
+display:none;
+
+}
+
+
 
 </style>
 
 </head>
 
+
 <body>
+
 
 <div class="box">
 
+
 <h1>HSC 2026 Vote</h1>
 
-<h3>আপনি কি MCQ + CQ মিলিয়ে পাস চান?</h3>
 
-<input type="radio" name="vote" value="yes"> হ্যাঁ
-
-<br><br>
-
-<input type="radio" name="vote" value="no"> না
-
-<br><br>
-
-<button onclick="submitVote()">ভোট দিন</button>
-
-
-<h2>ফলাফল</h2>
-
-<p>হ্যাঁ: <span id="yesCount">0</span></p>
-
-<div class="progress">
-<div id="yesBar"></div>
-</div>
-
-
-<p>না: <span id="noCount">0</span></p>
-
-<div class="progress">
-<div id="noBar"></div>
-</div>
-
-
-<p>মোট ভোট: <span id="total">0</span></p>
-
-<p>
-হ্যাঁ: <span id="yesPercent">0%</span>
-<br>
-না: <span id="noPercent">0%</span>
+<p class="question">
+আপনি কি MCQ + CQ মিলিয়ে পাস চান?
 </p>
 
 
+<label class="option">
+<input type="radio" name="vote" value="yes">
+হ্যাঁ
+</label>
+
+
+<br><br>
+
+
+<label class="option">
+<input type="radio" name="vote" value="no">
+না
+</label>
+
+
+<br>
+
+
+<button onclick="submitVote()">
+ভোট দিন
+</button>
+
+
+
+<div class="result">
+
+<h2>বর্তমান ফলাফল</h2>
+
+
+<p>
+হ্যাঁ ভোট:
+<span id="yesCount" class="number">0</span>
+</p>
+
+
+<div class="progress">
+<div id="yesBar" class="yes"></div>
 </div>
+
+
+<p>
+না ভোট:
+<span id="noCount" class="number">0</span>
+</p>
+
+
+<div class="progress">
+<div id="noBar" class="no"></div>
+</div>
+
+
+
+<h3>
+মোট ভোট: 
+<span id="total">0</span>
+</h3>
+
+
+<h3>
+হ্যাঁ: <span id="yesPercent">0%</span>
+<br>
+না: <span id="noPercent">0%</span>
+</h3>
+
+
+
+</div>
+
+
+
+<div id="joinBox">
+
+<a href="https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3">
+
+<button>
+WhatsApp Group Join
+</button>
+
+</a>
+
+</div>
+
+
+
 <script type="module">
 
 import { initializeApp } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-import { getDatabase, ref, get, set, onValue }
+import { getDatabase, ref, get, set, onValue } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
@@ -143,7 +278,7 @@ const noRef = ref(db,"votes/no");
 
 
 
-function showVote(){
+function updateResult(){
 
 
 get(yesRef).then(y=>{
@@ -154,6 +289,7 @@ get(noRef).then(n=>{
 let yes = y.val() || 0;
 
 let no = n.val() || 0;
+
 
 let total = yes + no;
 
@@ -169,10 +305,10 @@ document.getElementById("total").innerHTML=total;
 
 if(total>0){
 
+
 let yp=(yes/total)*100;
 
 let np=(no/total)*100;
-
 
 
 document.getElementById("yesPercent").innerHTML=
@@ -190,6 +326,7 @@ yp+"%";
 document.getElementById("noBar").style.width=
 np+"%";
 
+
 }
 
 
@@ -201,9 +338,10 @@ np+"%";
 
 
 
-onValue(yesRef,showVote);
+onValue(yesRef,updateResult);
 
-onValue(noRef,showVote);
+onValue(noRef,updateResult);
+
 
 
 
@@ -231,28 +369,26 @@ let voteRef = choice.value=="yes" ? yesRef : noRef;
 
 
 
-get(voteRef).then(data=>{
+get(voteRef).then(snapshot=>{
 
 
-let old = data.val() || 0;
-
+let old = snapshot.val() || 0;
 
 
 set(voteRef,old+1).then(()=>{
 
 
-alert("ভোট দেওয়া হয়েছে ✅");
+alert("আপনার ভোট দেওয়া হয়েছে ✅");
 
 
-// WhatsApp খুলবে
+// WhatsApp Group এ নিয়ে যাবে
 
 setTimeout(()=>{
 
 window.location.href=
-"https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3?s=cl&p=a&ilr=0&amv=0";
+"https://chat.whatsapp.com/HZFEEUwOEHQJSMqbX8Ike3";
 
-},1000);
-
+},1500);
 
 
 });
@@ -264,9 +400,9 @@ window.location.href=
 }
 
 
-
 </script>
 
 
 </body>
+
 </html>
